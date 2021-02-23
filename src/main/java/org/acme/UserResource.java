@@ -1,8 +1,5 @@
 package org.acme;
 
-
-
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -24,12 +21,14 @@ import io.smallrye.mutiny.Uni;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
-	
+
+	//for hibernate orm with panache repo
 	@Inject
 	UserRepository userRepo;
-	/*
-	 * @Inject Mutiny.Session mutinySession;
-	 */
+	
+	//for hibernate reactive without panache repo
+	//@Inject Mutiny.Session mutinySession;
+	 
 	 
 	 
 	 
@@ -44,8 +43,6 @@ public class UserResource {
 	public Uni<Response> saveUser(UserEntity user)
 	{
 		userRepo.persist(user);
-		//System.out.println("saveUser "+user);
-		//return Response.status(Response.Status.CREATED).entity(user).build();
 		return Uni.createFrom().item(Response.status(Response.Status.CREATED).entity(user).build());
 	}
 	
@@ -67,41 +64,9 @@ public class UserResource {
     @PUT
 	public Response updateUser(UserEntity user)
 	{
-		//userRepo.update()
+		userRepo.update();
 		System.out.println("updateUser "+user);
 		return Response.status(Response.Status.OK).entity(user).build();
-	}
-    
-	 
-//	    @GET
-//	    @Path("{id}")
-//	    public Uni<UserEntity> getSingle(Integer id) {
-//	        return mutinySession.find(UserEntity.class, id);
-//	    }
-	
-//	@POST
-//	@Transactional
-//	public Response saveUser(UserEntity user)
-//	{
-//		userRepo.persist(user);
-//		System.out.println("saveUser "+user);
-//		return Response.status(Response.Status.CREATED).entity(user).build();
-//	}
-//	@PUT
-//	public Response updateUser(UserEntity user)
-//	{
-//		//userRepo.update(null, null);
-//		System.out.println("updateUser "+user);
-//		return Response.status(Response.Status.OK).entity(user).build();
-//	}
-//	@DELETE
-//	public Response deleteUser(@Param() int id)
-//	{
-//		
-//	}
-	
-	
-	
-	
+	}	
 
 }
